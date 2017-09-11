@@ -1,4 +1,4 @@
-package com.liang.nestedscrollingdemo;
+package com.liang.nestedscrollingdemo.fling;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -8,8 +8,10 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Scroller;
 
 import java.util.Arrays;
 
@@ -18,27 +20,31 @@ import java.util.Arrays;
  * Created by zhangliang on 07/09/2017.
  */
 
-public class InnerVerticalViewGroup extends FrameLayout implements NestedScrollingChild {
+public class InnerVerticalFlingViewGroup extends FrameLayout implements NestedScrollingChild {
 	private NestedScrollingChildHelper helper = new NestedScrollingChildHelper(this);
+	private Scroller scroller;
+	private VelocityTracker tracker;
 	private static final String TAG = "inner";
 
-	public InnerVerticalViewGroup(Context context) {
+	public InnerVerticalFlingViewGroup(Context context) {
 		super(context);
 		init(context, null, 0);
 	}
 
-	public InnerVerticalViewGroup(Context context, @Nullable AttributeSet attrs) {
+	public InnerVerticalFlingViewGroup(Context context, @Nullable AttributeSet attrs) {
 		super(context, attrs);
 		init(context, attrs, 0);
 	}
 
-	public InnerVerticalViewGroup(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+	public InnerVerticalFlingViewGroup(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		init(context, attrs, defStyleAttr);
 	}
 
 	private void init(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		setNestedScrollingEnabled(true);
+		tracker = VelocityTracker.obtain();
+		scroller = new Scroller(context);
 	}
 
 	@Override
@@ -76,11 +82,13 @@ public class InnerVerticalViewGroup extends FrameLayout implements NestedScrolli
 
 	@Override
 	public boolean dispatchNestedPreFling(float velocityX, float velocityY) {
+		Log.d(TAG, "--dispatchNestedPreFling:" + velocityX + "/" + velocityY);
 		return helper.dispatchNestedPreFling(velocityX, velocityY);
 	}
 
 	@Override
 	public boolean dispatchNestedFling(float velocityX, float velocityY, boolean consumed) {
+		Log.d(TAG, "--dispatchNestedFling:" + velocityX +"/" + velocityY + "/" + consumed);
 		return helper.dispatchNestedFling(velocityX, velocityY, consumed);
 	}
 
@@ -89,23 +97,20 @@ public class InnerVerticalViewGroup extends FrameLayout implements NestedScrolli
 		helper.stopNestedScroll();
 	}
 
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		return super.dispatchTouchEvent(ev);
-	}
-
 	private int[] parentConsume = new int[2];
 	private int[] offset = new int[2];
 	private float lastY;
-	private float lastRelativeY;
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 //		Log.d(TAG, "onTouchEvent" + "/" + ev.getX() + "/" + ev.getY());
 //		Log.d(TAG, "xy:" + getX() + "/" + getY() + "/" + getTop());
-//		Log.d(TAG, "sy:" + getScrollY());
+		Log.d(TAG, "sy:" + getScrollY());
+		if(tracker == null) {
+			tracker = VelocityTracker.obtain();
+		}
+		tracker.addMovement(ev);
 		float y = ev.getRawY();// 需要考虑到父控件的移动
-		float ry = ev.getY();
 		switch (ev.getAction()) {
 			case MotionEvent.ACTION_DOWN:
 				startNestedScroll(ViewCompat.SCROLL_AXIS_VERTICAL);
@@ -126,12 +131,20 @@ public class InnerVerticalViewGroup extends FrameLayout implements NestedScrolli
 				if(Math.floor(Math.abs(childConsumeDy)) == 0) {
 					childConsumeDy = 0;
 				}
-				Log.d(TAG, "dy:" + (ry - lastRelativeY));
-				Log.d(TAG, "rawDy-childConsumeDy-parentConsumeDy:" + dy + "/" + childConsumeDy + "/" + parentConsume[1]);
+				Log.d(TAG, "dy-childConsumeDy-parentConsumeDy:" + dy + "/" + childConsumeDy + "/" + parentConsume[1]);
 				setY(getY() + childConsumeDy);
 				dispatchNestedScroll(0, (int) childConsumeDy, 0, parentConsume[1], offset);
+
 				break;
 			case MotionEvent.ACTION_UP:
+//				tracker.computeCurrentVelocity(1000);
+//				float vy = tracker.getYVelocity();
+//				Log.d(TAG,  vy + "");
+//				dispatchNestedFling(0, vy, true);
+//
+//				tracker.recycle();
+//				tracker = null;
+
 				helper.stopNestedScroll();
 				break;
 			case MotionEvent.ACTION_CANCEL:
@@ -141,7 +154,14 @@ public class InnerVerticalViewGroup extends FrameLayout implements NestedScrolli
 				break;
 		}
 		lastY = y;
-		lastRelativeY = ry;
 		return true;
 	}
+
+//	@Override
+//	public void computeScroll() {
+//		if(scroller.computeScrollOffset()) {
+//			invalidate();
+//		}
+//
+//	}
 }

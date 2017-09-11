@@ -1,4 +1,4 @@
-package com.liang.nestedscrollingdemo;
+package com.liang.nestedscrollingdemo.horizontalAndVertical;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,7 +7,6 @@ import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -40,43 +39,28 @@ public class OuterVerticalViewGroup extends FrameLayout implements NestedScrolli
 
 	@Override
 	public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
-//		Log.d(TAG, "--onStartNestedScroll:" + (child == target) + "/" + nestedScrollAxes);
 		return true;
 	}
 
 	@Override
 	public void onNestedScrollAccepted(View child, View target, int nestedScrollAxes) {
-//		Log.d(TAG, "--onNestedScrollAccepted:" + (child == target) + "/" + nestedScrollAxes);
 		helper.onNestedScrollAccepted(child, target, nestedScrollAxes);
 	}
 
 	@Override
 	public void onStopNestedScroll(View target) {
-//		Log.d(TAG, "--onStopNestedScroll:" + target.getClass().getSimpleName());
 		helper.onStopNestedScroll(target);
 	}
 
 	@Override
 	public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
 		Log.d(TAG, "--onNestedScroll:" + target.getClass().getSimpleName() + "/" + dxConsumed + "/" + dyConsumed + "/" + dxUnconsumed + "/" + dyUnconsumed);
-//		setY(getY() + dyUnconsumed);
-		float consumeDy;
-		if(dyUnconsumed + getY() <= 0 && dyUnconsumed < 0) {
-			consumeDy = -getY();
-		} else if(dyUnconsumed + getY() >= ((View)getParent()).getHeight() - getHeight() && dyUnconsumed > 0) {
-			consumeDy = ((View)getParent()).getHeight() - getHeight() - getY();
-		} else {
-			consumeDy = dyUnconsumed;
-		}
-		setY(getY() + consumeDy);
+		setY(getY() + dyUnconsumed);
 	}
 
 	@Override
 	public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
 		Log.d(TAG, "--onNestedPreScroll:" + target.getClass().getSimpleName() + "/" + dx + "/" + dy + "/" + Arrays.toString(consumed));
-//		handleTranslation(dy, consumed);
-//		handleSrcoll(dy, consumed);
-
 	}
 
 	@Override
@@ -93,25 +77,6 @@ public class OuterVerticalViewGroup extends FrameLayout implements NestedScrolli
 
 	@Override
 	public int getNestedScrollAxes() {
-		//		Log.d(TAG, "--getNestedScrollAxes");
 		return helper.getNestedScrollAxes();
-	}
-
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-//		Log.d(TAG, "dispatchTouchEvent" + "/" + ev.getX() + "/" + ev.getY());
-		return super.dispatchTouchEvent(ev);
-	}
-
-	@Override
-	public boolean onInterceptTouchEvent(MotionEvent ev) {
-//		Log.d(TAG, "onInterceptTouchEvent" + "/" + ev.getX() + "/" + ev.getY());
-		return super.onInterceptTouchEvent(ev);
-	}
-
-	@Override
-	public boolean onTouchEvent(MotionEvent ev) {
-//		Log.d(TAG, "onInterceptTouchEvent" + "/" + ev.getX() + "/" + ev.getY());
-		return super.onTouchEvent(ev);
 	}
 }

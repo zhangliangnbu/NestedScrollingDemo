@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.liang.nestedscrollingdemo.horizontalAndVertical.HVScrollActivity">
+
+    <com.liang.nestedscrollingdemo.horizontalAndVertical.OuterVerticalViewGroup
+        android:background="#999999"
+        android:layout_width="match_parent"
+        android:layout_height="360dp">
+
+        <com.liang.nestedscrollingdemo.horizontalAndVertical.InnerHorizontalViewGroup
+            android:background="#ff0000"
+            android:layout_width="100dp"
+            android:layout_height="200dp">
+            <TextView
+                android:background="#00ff00"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="内容啊!"/>
+        </com.liang.nestedscrollingdemo.horizontalAndVertical.InnerHorizontalViewGroup>
+
+    </com.liang.nestedscrollingdemo.horizontalAndVertical.OuterVerticalViewGroup>
+
+</android.support.constraint.ConstraintLayout>

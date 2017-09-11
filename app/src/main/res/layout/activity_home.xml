@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.liang.nestedscrollingdemo.HomeActivity">
+
+    <Button
+        android:id="@+id/btn_to_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="to_vertical_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_to_vh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="to_vertical_horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/btn_to_main"/>
+
+    <Button
+        android:id="@+id/btn_to_pts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="to_test_pts"
+        app:layout_constraintTop_toBottomOf="@+id/btn_to_vh"/>
+
+</android.support.constraint.ConstraintLayout>

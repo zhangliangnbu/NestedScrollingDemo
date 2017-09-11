@@ -1,4 +1,4 @@
-package com.liang.nestedscrollingdemo;
+package com.liang.nestedscrollingdemo.fling;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -18,20 +18,20 @@ import java.util.Arrays;
  * Created by zhangliang on 07/09/2017.
  */
 
-public class OuterVerticalViewGroup extends FrameLayout implements NestedScrollingParent {
+public class OuterVerticalFlingViewGroup extends FrameLayout implements NestedScrollingParent {
 
 	private final NestedScrollingParentHelper helper = new NestedScrollingParentHelper(this);
 	private static final String TAG = "outer";
 
-	public OuterVerticalViewGroup(@NonNull Context context) {
+	public OuterVerticalFlingViewGroup(@NonNull Context context) {
 		super(context);
 	}
 
-	public OuterVerticalViewGroup(@NonNull Context context, @Nullable AttributeSet attrs) {
+	public OuterVerticalFlingViewGroup(@NonNull Context context, @Nullable AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public OuterVerticalViewGroup(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+	public OuterVerticalFlingViewGroup(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 	}
 
